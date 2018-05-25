@@ -2,18 +2,9 @@
 
 > Foosball Rankings App
 
-## Installation
+## Notes
 
-```sh
-$ npm install --save foosball-node-app
-```
-
-## Usage
-
-```js
-var foosballNodeApp = require('foosball-node-app');
-foosballNodeApp();
-```
+> Uses a Mongo DB backend
 
 ## License
 
