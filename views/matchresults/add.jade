@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  if hasErrors == true
+    .alert.alert-danger(role="alert") #{errorMsg}
+  .container
+    .row
+      h5= title
+    form#formAddResult(name="add",method="post",action="/matchresults/add")
+      .row
+        .col-6
+          - var vsLabel = "vs"
+          label.float-right Battle Configuration:
+        .col-2
+          input.form-control(type="number", placeholder="1st Team Size", name="firstTeamSize" value='#{firstTeamSize}')
+          label= vsLabel
+          input.form-control(type="number", placeholder="2nd Team Size", name="secondTeamSize" value='#{secondTeamSize}')
+      .row
+        .col-6
+          label.float-right Participants:
+        .col-6
+          input.form-control(type="text", placeholder="Participants (Separate with comma!)", name="participants")
+      .row
+          .col-6
+            label.float-right Winners:
+          .col-6
+            input#winners.form-control(type="text", placeholder="Winners (Separate with comma!)", name="winners")
+      .row
+        button.btn.btn-success.form-btn(type="submit") Save

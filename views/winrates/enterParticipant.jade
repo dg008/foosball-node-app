@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+  if hasErrors == true
+    .alert.alert-danger(role="alert") #{errorMsg}
+  .container
+    .row
+      h5= title
+    form#formEnterParticipant(name="new",method="post",action="/winrates/calculate")
+      .row
+        .col-sm
+          - var particip1Lbl = 'Participant 1:'
+          label.float-right= particip1Lbl
+        .col-md
+          input.form-control(type="text", placeholder="Enter 1st Participant", name="firstParticipant")
+      .row
+        .col-sm
+            - var particip2Lbl = 'Participant 2 (Optional):'
+            label.float-right= particip2Lbl
+        .col-md
+          input.form-control(type="text", placeholder="Enter 2nd Participant", name="secondParticipant")
+      .row
+        button.btn.btn-success.form-btn(type="submit") Calculate Win Rates
