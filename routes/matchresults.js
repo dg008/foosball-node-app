@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var config = require('../config/config');
 
 router.get('/add', function(req, res) {
   res.render('matchresults/add', { title: 'Add New Match Result', firstTeamSize: 1, secondTeamSize: 1 });
@@ -21,7 +20,7 @@ router.post('/add', function(req, res) {
     });
   }
 
-  const collection = db.get(config.DB_COLLECTION_NAME);
+  const collection = db.get(process.env.DB_COLLECTION_NAME);
 
   collection.insert({
       "firstTeamSize" : firstTeamSize,

@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var winRatesCalculator = require('../services/winRatesCalculator');
-var config = require('../config/config');
 
 router.get('/', function(req, res) {
   res.render('winrates/enterParticipant', { title: 'View Win Rates for a Participant' });
@@ -22,7 +21,7 @@ router.post('/calculate', function(req, res) {
         });
     }
 
-    const collection = db.get(config.DB_COLLECTION_NAME);
+    const collection = db.get(process.env.DB_COLLECTION_NAME);
 
     winRatesCalculator({firstParticipant, secondParticipant, collection})
         .then(({numGamesWith1stParticipant,

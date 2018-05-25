@@ -5,9 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongo = require('mongodb');
 var monk = require('monk');
-var config = require('./config/config');
+require('dotenv').config();
 
-var db = monk(config.DB_CONNECTION_STR);
+var db = monk(process.env.DB_CONNECTION_STR);
 
 var indexRouter = require('./routes/index');
 var matchResultsRouter = require('./routes/matchresults');
