@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var winRatesCalculator = require('../services/winRatesCalculator');
+var winRatesCalculator = require('winrates-calculator');
 
 router.get('/', function(req, res) {
   res.render('winrates/enterParticipant', { title: 'View Win Rates for a Participant' });
@@ -23,23 +23,14 @@ router.post('/calculate', function(req, res) {
 
     const collection = db.get(process.env.DB_COLLECTION_NAME);
 
-    winRatesCalculator({firstParticipant, secondParticipant, collection})
-        .then(({numGamesWith1stParticipant,
-                    numGamesWonBy1stParticipant,
-                    numGamesWith2ndParticipant,
-                    numGamesWonBy1stParticipantAgainst2ndParticipant}) => {
-            let overallWinRate = (numGamesWonBy1stParticipant/numGamesWith1stParticipant)*100;
-            overallWinRate = isNaN(overallWinRate)
-            ? NaN
-            : overallWinRate.toFixed(2);
-            const overallLossRate = (100 - overallWinRate).toFixed(2);
-        
-            let specificWinRate = (numGamesWonBy1stParticipantAgainst2ndParticipant/numGamesWith2ndParticipant)*100;
-            specificWinRate = isNaN(specificWinRate)
-            ? NaN
-            : specificWinRate.toFixed(2);
-            const specificLossRate = (100 - specificWinRate).toFixed(2);
-        
+    const matchResults = collection.find({});
+    winRatesCalculator({firstParticipant, secondParticipant, matchResults})
+        .then(({numGamesWith2ndParticipant,
+                    overallWinRate,
+                    overallLossRate,
+                    specificWinRate,
+                    specificLossRate,}) => {
+                    
             res.render('winrates/results',
             {
                 title: 'Win Rates results',
@@ -48,10 +39,10 @@ router.post('/calculate', function(req, res) {
                 numGamesWith2ndParticipant,
                 overallWinLossRate: isNaN(overallWinRate)
                     ? 'N/A (Participant may not be entered/found)'
-                    : `${overallWinRate}% (WIN) / ${overallLossRate}% (LOSS)`,
+                    : `${overallWinRate.toFixed(2)}% (WIN) / ${overallLossRate.toFixed(2)}% (LOSS)`,
                 specificWinLossRate: isNaN(specificWinRate)
                     ? 'N/A (Participant may not be entered/found)'
-                    : `${specificWinRate }% (WIN) / ${specificLossRate}% (LOSS)`,
+                    : `${specificWinRate.toFixed(2)}% (WIN) / ${specificLossRate.toFixed(2)}% (LOSS)`,
             });
         })
 });
